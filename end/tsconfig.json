@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "module": "none",
+        "noImplicitAny": false,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "types": [
+            "typings/index.d.ts"
+        ]
+    }
+}

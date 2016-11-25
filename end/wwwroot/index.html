@@ -1,0 +1,79 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Address book</title>
+    <link rel="stylesheet" href="/css/styles.css?v=1.0">
+</head>
+<body>
+    <div class="content-container">
+        <h1>Address book</h1>
+        <hr/>
+        <br/>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>City</th>
+                    <th>Birth year</th>
+                    <th>Favorite?</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input data-bind="value: newItem.name, visible: newItem.isEditing()" type="text"/>
+                    </td>
+                    <td>
+                        <input data-bind="value: newItem.city, visible: newItem.isEditing()" type="text"/>
+                    </td>
+                    <td>
+                        <input data-bind="value: newItem.birthYear, visible: newItem.isEditing()" type="number"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" data-bind="checked: newItem.isFavoriteContact, visible: newItem.isEditing()" />
+                    </td>
+                    <td>
+                        <a href="javascript:void(0);" data-bind="click: editNew, visible: !newItem.isEditing()">new</a>
+                        <a href="javascript:void(0);" data-bind="click: cancelEditNew, visible: newItem.isEditing()">cancel</a>
+                        <a href="javascript:void(0);" data-bind="click: saveNew, visible: newItem.isEditing()">save</a>
+                    </td>
+                </tr>
+                <!-- ko foreach: data -->
+                <tr>
+                    <td>
+                        <span data-bind="text: name, visible: !isEditing()"></span>
+                        <input data-bind="value: name, visible: isEditing()" type="text"/>
+                    </td>
+                    <td>
+                        <span data-bind="text: city, visible: !isEditing()"></span>
+                        <input data-bind="value: city, visible: isEditing()" type="text"/>
+                    </td>
+                    <td>
+                        <span data-bind="text: birthYear, visible: !isEditing()"></span>
+                        <input data-bind="value: birthYear, visible: isEditing()" type="number"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" data-bind="checked: isFavoriteContact, disable: !isEditing()" />
+                    </td>
+                    <td>
+                        <a href="javascript:void(0);" data-bind="click: edit, visible: !isEditing()">edit</a>
+                        <a href="javascript:void(0);" data-bind="click: $root.deleteEntry, visible: !isEditing()">delete</a>
+                        <a href="javascript:void(0);" data-bind="click: save, visible: isEditing()">save</a>
+                        <a href="javascript:void(0);" data-bind="click: cancelEdit, visible: isEditing()">cancel</a>
+                    </td>
+                </tr>
+                <!-- /ko -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="/scripts/libs/nanoajax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
+    <script src="/scripts/service.js"></script>
+    <script src="/scripts/main.js"></script>
+</body>
+</html>
