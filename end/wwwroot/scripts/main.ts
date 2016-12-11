@@ -1,15 +1,15 @@
 /// <reference path="../../typings/globals/knockout/index.d.ts" />
 
 class AddressBookItemModel {
+    
+    private id: string;
+    private name: KnockoutObservable<string>;
+    private birthYear: KnockoutObservable<number>;
+    private isFavoriteContact: KnockoutObservable<boolean>;
+    private city: KnockoutObservable<string>;
+    private isEditing: KnockoutObservable<boolean>;
 
-    id: string;
-    name: KnockoutObservable<string>;
-    birthYear:  KnockoutObservable<number>;
-    isFavoriteContact:  KnockoutObservable<boolean>;
-    city:  KnockoutObservable<string>;
-    isEditing: KnockoutObservable<boolean>;
-
-    constructor(private addressBookItemsDto: AddressBookItemDto) {
+    constructor (private addressBookItemsDto: AddressBookItemDto) {
         this.id = addressBookItemsDto.id;
         this.name = ko.observable(addressBookItemsDto.name);
         this.birthYear = ko.observable(addressBookItemsDto.birthYear);
@@ -30,73 +30,67 @@ class AddressBookItemModel {
         this.addressBookItemsDto.city = this.city();
         service.save(this.addressBookItemsDto, function() { });
     };
-    cancelEdit () {
+    cancelEdit = function() {
         this.isEditing(false);
         this.name = ko.observable(this.addressBookItemsDto.name);
         this.birthYear = ko.observable(this.addressBookItemsDto.birthYear);
         this.isFavoriteContact = ko.observable(this.addressBookItemsDto.isFavoriteContact);
         this.city = ko.observable(this.addressBookItemsDto.city);
     };
-
-    
 };
 
-class ViewModel {
-    
-    private  service = new AddressBookService();
-
-    constructor() {
-        this.refresh();
-    }
-
-    data = ko.observableArray([]);
-    newItem = new AddressBookItemModel({
+var ViewModel = function() {
+    var self = this;
+    var service = new AddressBookService();
+    self.data = ko.observableArray([]);
+    self.newItem = new AddressBookItemModel({
+        id: undefined,
         city: '',
         name: '',
         birthYear: null,
         isFavoriteContact: false
     });
-    editNew = function() {
-        this.newItem.edit();
+    self.editNew = function() {
+        self.newItem.edit();
     };
-    saveNew = function() {
-        var dto = {
-            name: this.newItem.name(),
-            city: this.newItem.city(),
-            birthYear: this.newItem.birthYear(),
-            isFavoriteContact: this.newItem.isFavoriteContact()
+    self.saveNew = function() {
+        var dto: AddressBookItemDto = {
+            id: undefined,
+            name: self.newItem.name(),
+            city: self.newItem.city(),
+            birthYear: self.newItem.birthYear(),
+            isFavoriteContact: self.newItem.isFavoriteContact()
         }
-        this.service.save(dto, (responseDto: AddressBookItemDto) => {
-            this.newItem.name('');
-            this.newItem.city('');
-            this.newItem.birthYear(null);
-            this.newItem.isFavoriteContact(false);
-            this.newItem.isEditing(false);
-            this.data.push(new AddressBookItemModel(responseDto));
+        service.save(dto, function(responseDto) {
+            self.newItem.name('');
+            self.newItem.city('');
+            self.newItem.birthYear(null);
+            self.newItem.isFavoriteContact(false);
+            self.newItem.isEditing(false);
+            self.data.push(new AddressBookItemModel(responseDto));
         });
     };
-    cancelEditNew = function() {
-        this.newItem.cancelEdit();
+    self.cancelEditNew = function() {
+        self.newItem.cancelEdit();
     };
 
-    private refresh () {
-        this.service.getAll( (addressBookItemDtos: AddressBookItemDto[]) => {
-            this.data.removeAll();
-            addressBookItemDtos.forEach((dto: AddressBookItemDto) => {
-                this.data.push(new AddressBookItemModel(dto));
-            });
+    var refresh = async function() {
+        var addressBookItemDtos = await service.getAll();
+        self.data.removeAll();
+        addressBookItemDtos.forEach(function(dto) {
+            self.data.push(new AddressBookItemModel(dto));
         });
     };
     
-    deleteEntry = function(entry) {
+    self.deleteEntry = function(entry) {
         if (window.confirm("Do you really want to delete contact: " + entry.name() + "?")) {
-            this. service.del(entry.id, function() {
-                this.refresh();
+            service.del(entry.id, function() {
+                refresh();
             });
         }
     };
 
-    
+    refresh();
 };
 
 document.addEventListener('DOMContentLoaded', function () {

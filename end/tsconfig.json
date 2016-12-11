@@ -1,12 +1,14 @@
+// http://www.typescriptlang.org/docs/handbook/tsconfig-json.html
 {
     "compilerOptions": {
         "module": "none",
         "noImplicitAny": false,
-        "removeComments": false,
+        "removeComments": true,
         "preserveConstEnums": true,
         "sourceMap": true,
-        "types": [
-            "typings/index.d.ts"
-        ]
-    }
+        "lib": ["dom", "es2015.promise", "es5"]
+    },
+    "exclude": [
+        "node_modules/"
+    ]
 }

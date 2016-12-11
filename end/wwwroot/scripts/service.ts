@@ -1,15 +1,17 @@
 /// <reference path="../../typings/globals/nanoajax/index.d.ts" />
 
-class AddressBookService  {
-    getAll (callback: (data: AddressBookItemDto[]) => void) {
+class AddressBookService {
+    getAll (): Promise<AddressBookItemDto[]> {
         var url = '/api/data/all';
-        nanoajax.ajax({
-            url: url
-        }, function(code: number, json: string) {
-            callback(<AddressBookItemDto[]>JSON.parse(json));
+        return new Promise<AddressBookItemDto>(resolve => {
+            nanoajax.ajax({
+                url: url
+            }, function(code, json) {
+                resolve(JSON.parse(json));
+            });
         });
     };
-    save (item: AddressBookItemDto, callback: (savedItem: AddressBookItemDto) => void) {
+    save (item: AddressBookItemDto, callback: (result: AddressBookItemDto) => void) {
         var url = '/api/data/save';
         nanoajax.ajax({
             url: url, 
@@ -29,5 +31,4 @@ class AddressBookService  {
             callback();
         });
     }
-
 };

@@ -1,13 +1,14 @@
-/// <reference path="../../typings/globals/nanoajax/index.d.ts" />
 var AddressBookService = (function () {
     function AddressBookService() {
     }
-    AddressBookService.prototype.getAll = function (callback) {
+    AddressBookService.prototype.getAll = function () {
         var url = '/api/data/all';
-        nanoajax.ajax({
-            url: url
-        }, function (code, json) {
-            callback(JSON.parse(json));
+        return new Promise(function (resolve) {
+            nanoajax.ajax({
+                url: url
+            }, function (code, json) {
+                resolve(JSON.parse(json));
+            });
         });
     };
     ;

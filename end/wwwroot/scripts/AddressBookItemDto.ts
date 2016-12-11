@@ -1,7 +1,8 @@
 interface AddressBookItemDto {
-    id?: string,
+    id: string,
     name: string,
+    phoneNumber?: string,
     city: string,
-    birthYear?: number,
+    birthYear: number | null,
     isFavoriteContact: boolean
 }
