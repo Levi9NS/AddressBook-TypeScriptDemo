@@ -1,1 +1,0 @@
-node c:\Users\m.stanacev\Downloads\TypeScript-2.1.2\built\local\tsc.js --w
